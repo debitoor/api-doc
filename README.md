@@ -1,7 +1,7 @@
 # api-doc [![Build Status](https://travis-ci.org/e-conomic/api-doc.svg?branch=master)](https://travis-ci.org/e-conomic/api-doc)
 [![npm package](https://nodei.co/npm/api-doc.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/api-doc/)
 
-Create documentation for the API of an express app.
+Create documentation for the API of an express app. As an endpoint in an express app.
 
 	npm install api-doc
 
