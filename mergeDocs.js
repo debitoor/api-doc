@@ -21,6 +21,9 @@ module.exports = function (doc1In, doc2In) {
 			}
 		}
 	}
+	if (doc1.description && doc2.description) {
+		doc2.description += '\n' + doc1.description;
+	}
 	var doc = xtend(doc1, doc2);
 	return doc;
 };
