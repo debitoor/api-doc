@@ -27,22 +27,31 @@ module.exports = function (http, options) {
 
 		function populateApiDocCache() {
 			var output = {};
-			http._router.stack.forEach(function(layer) {
+			http._router.stack.forEach(handleLayer.bind(null, ''));
+
+			apiDocCache = output;
+
+			function handleLayer(root, layer) {
 				if (layer.route) {
 					var path = layer.route.path;
 					path = path.replace(/:version\((v\d+)(?:\|v\d+)*\)/, '$1'); // 'version:(v3|v2|v1)' -> 'v3'
 					var doc = getInlineDocumentationForHandlers(layer.route.stack);
 					if (layer.route.methods && (options.showNonPublic || doc.isPublic)) {
-						output[path] = output[path] || {};
-						Object.keys(layer.route.methods).filter(isValidVerb).forEach(function(methodType) {
-							output[path][methodType] = doc;
+						output[root + path] = output[root + path] || {};
+						Object.keys(layer.route.methods).filter(isValidVerb).forEach(function (methodType) {
+							output[root + path][methodType] = doc;
 						});
 					}
+				} else if (layer.handle && layer.handle.stack && layer.handle.stack.length) {
+					var route = layer.handle.doc || normalize(layer.regexp.source);
+					console.log(route);
+					layer.handle.stack.forEach(handleLayer.bind(null, root + route));
 				}
-			});
-
-			apiDocCache = output;
+			}
 		}
+	}
+	function normalize(regexp){
+		return regexp.replace(/^[^]/g, '').replace(/\\[/]/g , '/').replace('/?(?=\/|$)', '');
 	}
 
 	function isValidVerb(verb) {
