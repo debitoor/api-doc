@@ -44,7 +44,6 @@ module.exports = function (http, options) {
 					}
 				} else if (layer.handle && layer.handle.stack && layer.handle.stack.length) {
 					var route = layer.handle.doc || normalize(layer.regexp.source);
-					console.log(route);
 					layer.handle.stack.forEach(handleLayer.bind(null, root + route));
 				}
 			}
