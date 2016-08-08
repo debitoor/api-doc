@@ -11,9 +11,9 @@ module.exports = function (http, options) {
 	}
 	var useCache = options && options.cache === false ? false : true; //default: true
 	returnApiDocumentationMiddleware.doc = {
-		produces:'application/json',
-		httpStatus:{
-			"200":'JSON'
+		produces: 'application/json',
+		httpStatus: {
+			"200": 'JSON'
 		},
 		example: schemagic.apidoc.exampleJson
 	};
@@ -39,7 +39,7 @@ module.exports = function (http, options) {
 					if (layer.route.methods && (options.showNonPublic || doc.isPublic)) {
 						output[root + path] = output[root + path] || {};
 						Object.keys(layer.route.methods).filter(isValidVerb).forEach(function (methodType) {
-							output[root + path][methodType] = doc;
+							output[root + path][methodType] = process(doc);
 						});
 					}
 				} else if (layer.handle && layer.handle.stack && layer.handle.stack.length) {
@@ -49,8 +49,30 @@ module.exports = function (http, options) {
 			}
 		}
 	}
-	function normalize(regexp){
-		return regexp.replace(/^[^]/g, '').replace(/\\[/]/g , '/').replace('/?(?=\/|$)', '');
+
+	function process(doc) {
+		if (isexampleJson(doc.example)) {
+			doc.produces = doc.consumes = 'application/json';
+		} else if (isexampleJson(doc.exampleResult)) {
+			doc.consumes = 'application/json';
+		}
+		if (doc.exampleResult && !doc.example) {
+			doc.example = '//No need to pass any content in the body.';
+		}
+		return doc;
+
+		function isexampleJson(example) {
+			try {
+				schemagic.parseExampleJson(example);
+				return true;
+			} catch (ex) {
+				return false;
+			}
+		}
+	}
+
+	function normalize(regexp) {
+		return regexp.replace(/^[^]/g, '').replace(/\\[/]/g, '/').replace('/?(?=\/|$)', '');
 	}
 
 	function isValidVerb(verb) {

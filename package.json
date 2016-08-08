@@ -23,7 +23,7 @@
     "sinon": "^1.17.5"
   },
   "dependencies": {
-    "schemagic": "^3.0.2",
+    "schemagic": "^4.0.0",
     "xtend": "^4.0.1"
   }
 }
