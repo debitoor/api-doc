@@ -1,6 +1,6 @@
 {
   "name": "api-doc",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": "Create documentation for the API of an express app",
   "main": "index.js",
   "scripts": {
