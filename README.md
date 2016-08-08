@@ -27,6 +27,18 @@ app.get('/apidoc/', apiDoc(app, options));
 
 ```
 
+# Getting api docs from express app without the middleware
+```javascript
+var apiDoc = require('api-doc');
+var options = {
+	showNonPublic: true
+	cache: false
+}
+
+var docs = apiDoc.getApiDocs(app, options);
+
+```
+
 - `showNonPublic`, boolean, default `false`. If set to `true` even endpoints that do not have the `public:true` will be documented. 
 This can be used in development mode for example to see all endpoints in your docs.
 - `cache`, boolean, default `true`. If set to `false` the api documentation will be extracted for the express app on every call.
