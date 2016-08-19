@@ -24,25 +24,6 @@ module.exports = { description: 'TODO: Add description',
 							type: ['null', 'string'],
 							example: 'application/json'
 						},
-						httpStatus: {
-							description: 'TODO: Add description for: httpStatus',
-							required: false,
-							type: ['null', 'object'],
-							properties: {
-								'200': {
-									description: 'Description of data returned when http status code is 200',
-									required: false,
-									type: ['null', 'string'],
-									example: 'A list of customers'
-								},
-								'412': {
-									description: 'Description why 412 can be returned',
-									required: false,
-									type: ['null', 'string'],
-									examlpe: 'A malformed querystring prameter'
-								}
-							}
-						},
 						example: {
 							description: 'string representing an example of the (pretty-printed) JSON this endpoint produces',
 							required: false,
@@ -72,31 +53,6 @@ module.exports = { description: 'TODO: Add description',
 							required: false,
 							type: ['null', 'string'],
 							example: 'application/json'
-						},
-						httpStatus: {
-							description: 'TODO: Add description for: httpStatus',
-							required: false,
-							type: ['null', 'object'],
-							properties: {
-								'200': {
-									description: 'Description of data returned when http status code is 200',
-									required: false,
-									type: ['null', 'string'],
-									example: 'A list of customers'
-								},
-								'400': {
-									description: 'Description why 400 can be returned',
-									required: false,
-									type: ['null', 'string'],
-									eaxmple: 'Error validating data passed'
-								},
-								'412': {
-									description: 'Description why 412 can be returned',
-									required: false,
-									type: ['null', 'string'],
-									examlpe: 'A malformed querystring prameter'
-								}
-							}
 						},
 						example: {
 							description: 'string representing an example of the (pretty-printed) JSON this endpoint produces',
