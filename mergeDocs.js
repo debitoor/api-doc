@@ -10,20 +10,21 @@ module.exports = function (doc1In, doc2In) {
 	}
 	var doc1 = JSON.parse(JSON.stringify(doc1In)); //clone
 	var doc2 = JSON.parse(JSON.stringify(doc2In));
-	if (doc1.httpStatus && doc2.httpStatus) {
-		//copy doc1 status codes onto doc2
-		for(var code in doc1.httpStatus){
-			if(doc2.httpStatus[code]){
-				//code exists in both docs, join descriptive text
-				doc2.httpStatus[code] += '. ' + doc1.httpStatus[code];
-			} else {
-				doc2.httpStatus[code] = doc1.httpStatus[code];
-			}
+	var doc, description;
+	if (doc1.description && doc2.description){
+		if(doc1.description.indexOf(doc2.description)!==-1){
+			description = doc1.description;
+		} else if(doc2.description.indexOf(doc1.description)!==-1){
+			description = doc2.description;
+		} else {
+			description = doc2.description + '\n' + doc1.description;
 		}
+	} else {
+		description = doc1.description || doc2.description;
 	}
-	if (doc1.description && doc2.description) {
-		doc2.description += '\n' + doc1.description;
+	doc = xtend(doc1, doc2);
+	if(description){
+		doc.description = description;
 	}
-	var doc = xtend(doc1, doc2);
 	return doc;
 };

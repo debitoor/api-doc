@@ -149,11 +149,7 @@ describe('apiDoc', function () {
 
 			myCallback1.doc = {
 				produces: 'application/json',
-				consumes: 'application/json',
-				httpStatus: {
-					"200": 'JSON',
-					"401": 'Error1'
-				}
+				consumes: 'application/json'
 			};
 			apiDocumentation = getApiDocumentation([myCallback1]);
 		});
@@ -163,18 +159,14 @@ describe('apiDoc', function () {
 				'/myGet': {
 					get: {
 						produces: 'application/json',
-						consumes: 'application/json',
-						httpStatus: {
-							"200": 'JSON',
-							"401": 'Error1'
-						}
+						consumes: 'application/json'
 					}
 				}
 			});
 		});
 	});
 
-	describe('with a GET route with a two middlewares with .doc defined', function () {
+	describe('with a GET route with a two middlewares with .doc defined and same description twice', function () {
 		var apiDocumentation;
 
 		before(function () {
@@ -182,20 +174,15 @@ describe('apiDoc', function () {
 			}
 
 			myCallback1.doc = {
-				consumes: 'application/json',
-				httpStatus: {
-					"200": 'JSON'
-				}
+				description: 'test',
+				consumes: 'application/json'
 			};
 			function myCallback2() {
 			}
 
 			myCallback2.doc = {
-				produces: 'application/json',
-				httpStatus: {
-					"300": 'My message',
-					"500": 'Internal Error'
-				}
+				description: 'test',
+				produces: 'application/json'
 			};
 			apiDocumentation = getApiDocumentation([myCallback1, myCallback2]);
 		});
@@ -204,13 +191,42 @@ describe('apiDoc', function () {
 			expect(apiDocumentation).to.eql({
 				'/myGet': {
 					get: {
+						description: 'test',
 						produces: 'application/json',
-						consumes: 'application/json',
-						httpStatus: {
-							"200": 'JSON',
-							"300": 'My message',
-							"500": 'Internal Error'
-						}
+						consumes: 'application/json'
+					}
+				}
+			});
+		});
+	});
+	describe('with a GET route with a two middlewares with .doc defined and two different descriptions', function () {
+		var apiDocumentation;
+
+		before(function () {
+			function myCallback1() {
+			}
+
+			myCallback1.doc = {
+				description: 'test1',
+				consumes: 'application/json'
+			};
+			function myCallback2() {
+			}
+
+			myCallback2.doc = {
+				description: 'test2',
+				produces: 'application/json'
+			};
+			apiDocumentation = getApiDocumentation([myCallback1, myCallback2]);
+		});
+
+		it('returns merged documentation', function () {
+			expect(apiDocumentation).to.eql({
+				'/myGet': {
+					get: {
+						description: 'test2\ntest1',
+						produces: 'application/json',
+						consumes: 'application/json'
 					}
 				}
 			});
