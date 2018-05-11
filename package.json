@@ -1,6 +1,6 @@
 {
   "name": "api-doc",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Create documentation for the API of an express app",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "sinon": "^1.17.5"
   },
   "dependencies": {
-    "schemagic": "^4.3.0",
-    "xtend": "^4.0.1"
+    "schemagic": "6.1.1",
+    "xtend": "4.0.1"
   }
 }
