@@ -4,7 +4,7 @@ module.exports = {
 	type: 'object',
 	properties: {
 		'/customers': {
-			description: 'Root level properties are the routes in your express app',
+			description: 'Root level properties are the routes in your express app (IT edition)',
 			required: true,
 			type: 'object',
 			properties: {

@@ -1,4 +1,4 @@
-var apiDocCache = null;
+var apiDocCache = {};
 var mergeDocs = require('./mergeDocs');
 var schemagic = require('schemagic');
 // options (object):
@@ -20,16 +20,17 @@ module.exports = function (http, options) {
 	return returnApiDocumentationMiddleware;
 
 	function returnApiDocumentationMiddleware(req, res, next) {
-		if (!useCache || !apiDocCache) {
+		var locale = req.query && req.query.locale;
+		if (!useCache || !apiDocCache[locale]) {
 			populateApiDocCache();
 		}
-		return res.json(apiDocCache); //use cached version
+		return res.json(apiDocCache[locale]); //use cached version
 
 		function populateApiDocCache() {
 			var output = {};
 			http._router.stack.forEach(handleLayer.bind(null, ''));
 
-			apiDocCache = output;
+			apiDocCache[locale] = output;
 
 			function handleLayer(root, layer) {
 				if (layer.route) {
@@ -47,6 +48,13 @@ module.exports = function (http, options) {
 					layer.handle.stack.forEach(handleLayer.bind(null, root + route));
 				}
 			}
+		}
+
+		function getInlineDocumentationForHandlers(routes) {
+			return routes
+				.map(function (handler) { return handler.handle.getDoc && handler.handle.getDoc(locale) || handler.handle.doc; })
+				.filter(Boolean)
+				.reduce(mergeDocs, {});
 		}
 	}
 
@@ -77,18 +85,7 @@ module.exports = function (http, options) {
 	}
 
 	function isValidVerb(verb) {
-		return verb in {'get': true, 'put': true, 'post': true, 'delete': true, 'patch': true};
-	}
-
-	function getInlineDocumentationForHandlers(routes) {
-		return routes
-			.map(function (handler) {
-				return handler.handle.doc;
-			})
-			.filter(function (doc) {
-				return doc;
-			})
-			.reduce(mergeDocs, {});
+		return verb in { 'get': true, 'put': true, 'post': true, 'delete': true, 'patch': true };
 	}
 };
 
